@@ -7,11 +7,31 @@
 /* Create an empty queue */
 struct list_head *q_new()
 {
-    return NULL;
+    struct list_head *lh = malloc(sizeof(struct list_head));
+
+    if (!lh) {
+        return NULL;
+    }
+
+    INIT_LIST_HEAD(lh);
+
+    return lh;
 }
 
 /* Free all storage used by queue */
-void q_free(struct list_head *head) {}
+void q_free(struct list_head *head)
+{
+    element_t *e = NULL, *is = NULL;
+    if (!head)
+        return;
+
+    list_for_each_entry_safe(e, is, head, list) {
+        list_del(&e->list);
+        // printf("free e %p\n", e);
+        q_release_element(e);
+    }
+    free(head);
+}
 
 /* Insert an element at head of queue */
 bool q_insert_head(struct list_head *head, char *s)
