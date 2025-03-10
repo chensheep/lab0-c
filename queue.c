@@ -37,9 +37,17 @@ void q_free(struct list_head *head)
 bool q_insert_head(struct list_head *head, char *s)
 {
     element_t *e = malloc(sizeof(element_t));
-    // printf("malloc e %p\n", e);
+    if (!e) {
+        return false;
+    }
+
     int sl = strlen(s);
-    e->value = malloc((sl + 1) * sizeof(char));
+    char *c = malloc((sl + 1) * sizeof(char));
+    if (!c) {
+        free(e);
+        return false;
+    }
+    e->value = c;
     strncpy(e->value, s, sl + 1);
     list_add(&e->list, head);
     return true;
@@ -49,8 +57,17 @@ bool q_insert_head(struct list_head *head, char *s)
 bool q_insert_tail(struct list_head *head, char *s)
 {
     element_t *e = malloc(sizeof(element_t));
+    if (!e) {
+        return false;
+    }
+
     int sl = strlen(s);
-    e->value = malloc((sl + 1) * sizeof(char));
+    char *c = malloc((sl + 1) * sizeof(char));
+    if (!c) {
+        free(e);
+        return false;
+    }
+    e->value = c;
     strncpy(e->value, s, sl + 1);
     list_add_tail(&e->list, head);
     return true;
@@ -84,13 +101,15 @@ element_t *q_remove_tail(struct list_head *head, char *sp, size_t bufsize)
     if (!head)
         return NULL;
 
-    if (list_empty(head))
+    if (list_empty(head)) {
         return NULL;
+    }
 
     element_t *last;
     last = list_last_entry(head, element_t, list);
 
     strncpy(sp, last->value, bufsize - 1);
+    sp[bufsize - 1] = '\0';
     list_del(&last->list);
 
     return last;
