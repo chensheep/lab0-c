@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "queue.h"
+#include "random.h"
 
 /* Create an empty queue */
 struct list_head *q_new()
@@ -484,4 +485,28 @@ int q_merge(struct list_head *head, bool descend)
     q_sort(first->q, descend);
 
     return q_size(first->q);
+}
+
+void q_shuffle(struct list_head *head)
+{
+    // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+    if (!head || list_empty(head) || list_is_singular(head))
+        return;
+
+    int remains = q_size(head);
+    while (remains != 0) {
+        uint64_t randnum = 0;
+        randombytes((uint8_t *) &randnum, sizeof(uint64_t));
+        int idx = randnum % remains;
+        struct list_head *node;
+        int i = 0;
+        list_for_each(node, head) {
+            if (idx == i) {
+                list_move_tail(node, head);
+                break;
+            }
+        }
+
+        remains--;
+    }
 }

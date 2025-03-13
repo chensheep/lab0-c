@@ -252,4 +252,17 @@ int q_descend(struct list_head *head);
  */
 int q_merge(struct list_head *head, bool descend);
 
+/**
+ * q_shuffle() - Shuffle the nodes of a linked list randomly
+ * @head: Pointer to the list head
+ *
+ * This function shuffles the given linked list by randomly moving
+ * an unselected node to the end of the list until all nodes
+ * have been selected.
+ *
+ * The function returns immediately if the list is NULL, empty,
+ * or contains only a single node.
+ */
+void q_shuffle(struct list_head *head);
+
 #endif /* LAB0_QUEUE_H */
