@@ -505,6 +505,7 @@ void q_shuffle(struct list_head *head)
                 list_move_tail(node, head);
                 break;
             }
+            i++;
         }
 
         remains--;
